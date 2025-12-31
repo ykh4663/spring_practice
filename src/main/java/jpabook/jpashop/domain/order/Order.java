@@ -23,7 +23,7 @@ import static jpabook.jpashop.global.error.OrderErrorCode.CANNOT_CANCEL_ORDER;
 @Builder
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
@@ -32,6 +32,7 @@ public class Order {
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -59,13 +60,11 @@ public class Order {
     }
 
     //===생성 메서드===//
-    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems){
+    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems) {
         Order order = Order.builder().orderDate(LocalDateTime.now()).status(OrderStatus.ORDER).build();
         order.changeMember(member);
         order.changeDelivery(delivery);
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
+        orderItems.forEach(order::addOrderItem);
         return order;
 
     }

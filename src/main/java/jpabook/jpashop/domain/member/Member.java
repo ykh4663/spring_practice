@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
@@ -29,6 +29,7 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order){

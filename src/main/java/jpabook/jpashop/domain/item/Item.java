@@ -20,7 +20,7 @@ import static jpabook.jpashop.global.error.ItemErrorCode.NOT_ENOUGH_STOCK;
 @SuperBuilder
 public abstract class Item {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private String name;

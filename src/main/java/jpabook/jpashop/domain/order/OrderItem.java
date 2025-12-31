@@ -2,6 +2,7 @@ package jpabook.jpashop.domain.order;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.item.Item;
+import jpabook.jpashop.global.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderItem {
+public class OrderItem extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "order_item_id")

@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain.item;
 
 import jakarta.persistence.*;
+import jpabook.jpashop.global.common.BaseEntity;
 import jpabook.jpashop.global.error.ApplicationException;
 import lombok.AllArgsConstructor;
 
@@ -18,7 +19,7 @@ import static jpabook.jpashop.global.error.ItemErrorCode.NOT_ENOUGH_STOCK;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public abstract class Item {
+public abstract class Item extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;

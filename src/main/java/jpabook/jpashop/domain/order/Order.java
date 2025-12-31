@@ -2,6 +2,7 @@ package jpabook.jpashop.domain.order;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.member.Member;
+import jpabook.jpashop.global.common.BaseEntity;
 import jpabook.jpashop.global.error.ApplicationException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ import static jpabook.jpashop.global.error.OrderErrorCode.CANNOT_CANCEL_ORDER;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order {
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "order_id")

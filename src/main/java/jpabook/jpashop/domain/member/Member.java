@@ -3,6 +3,7 @@ package jpabook.jpashop.domain.member;
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.common.Address;
 import jpabook.jpashop.domain.order.Order;
+import jpabook.jpashop.global.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_id")

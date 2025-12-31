@@ -2,6 +2,7 @@ package jpabook.jpashop.domain.order;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.common.Address;
+import jpabook.jpashop.global.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Delivery {
+public class Delivery extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "delivery_id")

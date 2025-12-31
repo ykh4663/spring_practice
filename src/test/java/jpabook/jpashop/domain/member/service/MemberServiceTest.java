@@ -29,9 +29,10 @@ class MemberServiceTest {
 
         //when
         Long saveId = memberService.join(member);
+        Member getMember = memberRepository.findById(saveId).orElseThrow(() -> new ApplicationException(NOT_FOUND_MEMBER));
 
         //then
-        assertThat(saveId).isEqualTo(memberService.findOne(saveId).getId());
+        assertThat(saveId).isEqualTo(getMember.getId());
 
 
     }

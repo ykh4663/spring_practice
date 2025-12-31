@@ -38,5 +38,11 @@ public class Member extends BaseEntity {
     }
 
 
+    public void changeName(String name) {
+        this.name = name;
+    }
 
+    public void changeAddress(Address address) {
+        this.address = address;
+    }
 }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 
 import static jpabook.jpashop.global.error.MemberErrorCode.DUPLICATE_MEMBER;
@@ -32,31 +33,39 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(Long id, UpdateMemberRequest dto){
+    public void update(Long id, UpdateMemberRequest dto) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(NOT_FOUND_MEMBER));
 
-        // 1. 이름: 값이 있을 때만(null, "", " " 제외) 변경
-        if (StringUtils.hasText(dto.name())) {
-            member.changeName(dto.name());
-        }
+        // 1. 이름 변경
+        // "값이 있고(Nullable) && 공백이 아니면(Filter) -> 실행(ifPresent)"
+        Optional.ofNullable(dto.name())
+                .filter(StringUtils::hasText)
+                .ifPresent(member::changeName);
 
-        Address currentAddress = member.getAddress();
+        // 2. 주소 변경 (불변 객체 교체 로직)
+        Address current = member.getAddress();
 
-        // 2. 주소: 값이 있을 때만(null, "", " " 제외) 새 값 사용, 아니면 기존 값 유지
-        String newCity = StringUtils.hasText(dto.city()) ? dto.city() : currentAddress.getCity();
-        String newStreet = StringUtils.hasText(dto.street()) ? dto.street() : currentAddress.getStreet();
-        String newZipcode = StringUtils.hasText(dto.zipcode()) ? dto.zipcode() : currentAddress.getZipcode();
+        // "새 값이 유효하면 그거 쓰고, 아니면 기존 거 써라(orElse)"
+        String newCity = Optional.ofNullable(dto.city())
+                .filter(StringUtils::hasText)
+                .orElse(current.getCity());
 
-        Address newAddress = Address.builder()
+        String newStreet = Optional.ofNullable(dto.street())
+                .filter(StringUtils::hasText)
+                .orElse(current.getStreet());
+
+        String newZipcode = Optional.ofNullable(dto.zipcode())
+                .filter(StringUtils::hasText)
+                .orElse(current.getZipcode());
+
+        // 3. 변경 감지 (새 주소 객체로 갈아끼우기)
+        member.changeAddress(Address.builder()
                 .city(newCity)
                 .street(newStreet)
                 .zipcode(newZipcode)
-                .build();
-
-        member.changeAddress(newAddress);
+                .build());
     }
-
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {

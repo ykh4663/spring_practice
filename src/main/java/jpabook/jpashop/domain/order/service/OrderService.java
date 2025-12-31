@@ -7,7 +7,7 @@ import jpabook.jpashop.domain.member.repository.MemberRepository;
 import jpabook.jpashop.domain.order.Delivery;
 import jpabook.jpashop.domain.order.Order;
 import jpabook.jpashop.domain.order.OrderItem;
-import jpabook.jpashop.domain.order.dto.OrderItemDto;
+import jpabook.jpashop.domain.order.dto.CreateOrderItemRequest;
 import jpabook.jpashop.domain.order.repository.OrderRepository;
 import jpabook.jpashop.global.error.ApplicationException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class OrderService {
     private final ItemRepository itemRepository;
     //주문
     @Transactional//회원 선택, 상품 선택 하면 각 아이디들이 넘어오는 것임-> 화면에서 보고 싶은 정보들 뽑아오기
-    public Long order(Long memberId, List<OrderItemDto> itemDtos){
+    public Long order(Long memberId, List<CreateOrderItemRequest> itemDtos){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(NOT_FOUND_MEMBER));
         Delivery delivery = Delivery.builder().address(member.getAddress()).build();
 
@@ -58,9 +58,9 @@ public class OrderService {
 //        return orderRepository.findAll(orderSearch);
 //    }
 
-    private List<OrderItem> getOrderItems(List<OrderItemDto> itemDtos) {
+    private List<OrderItem> getOrderItems(List<CreateOrderItemRequest> itemDtos) {
         List<OrderItem> orderItems = new ArrayList<>();
-        for (OrderItemDto itemDto : itemDtos) {
+        for (CreateOrderItemRequest itemDto : itemDtos) {
             Item item = itemRepository.findById(itemDto.itemId()).orElseThrow(() -> new ApplicationException(NOT_FOUND_ITEM));
             OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), itemDto.count());
             orderItems.add(orderItem);

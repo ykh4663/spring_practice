@@ -6,7 +6,7 @@ import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.member.Member;
 import jpabook.jpashop.domain.order.Order;
 import jpabook.jpashop.domain.order.OrderStatus;
-import jpabook.jpashop.domain.order.dto.OrderItemDto;
+import jpabook.jpashop.domain.order.dto.CreateOrderItemRequest;
 import jpabook.jpashop.domain.order.repository.OrderRepository;
 import jpabook.jpashop.global.error.ApplicationException;
 
@@ -49,7 +49,7 @@ class OrderServiceTest {
         int orderCount = 2;
 
         //when
-        Long orderId = orderService.order(member.getId(), List.of(new OrderItemDto(book.getId(), orderCount)));
+        Long orderId = orderService.order(member.getId(), List.of(new CreateOrderItemRequest(book.getId(), orderCount)));
 
 
         //then
@@ -69,7 +69,7 @@ class OrderServiceTest {
 
         //when
 
-        assertThatThrownBy(()->orderService.order(member.getId(), List.of(new OrderItemDto(book.getId(), orderCount))))
+        assertThatThrownBy(()->orderService.order(member.getId(), List.of(new CreateOrderItemRequest(book.getId(), orderCount))))
                 .isInstanceOf(ApplicationException.class)
                 .extracting("errorCode")
                 .isEqualTo(ItemErrorCode.NOT_ENOUGH_STOCK);
@@ -79,7 +79,7 @@ class OrderServiceTest {
         //given
         int orderCount = 2;
 
-        Long orderId = orderService.order(member.getId(), List.of(new OrderItemDto(book.getId(), orderCount)));
+        Long orderId = orderService.order(member.getId(), List.of(new CreateOrderItemRequest(book.getId(), orderCount)));
 
         //when
         orderService.cancelOrder(orderId);

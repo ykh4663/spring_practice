@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -55,9 +56,10 @@ public class OrderApiController {
             @RequestParam(value = "offset", defaultValue = "0")int offset,
             @RequestParam(value = "limit", defaultValue = "100")int limit
     ) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.Direction.DESC, "member.name");
 
-        Page<Order> orders = orderRepository.findJpqlWithMemberDelivery(pageRequest);
+        Page<Order> orders = orderRepository.findAllWithMemberDelivery(pageRequest);
+
         Page<OrderDto> result = orders.map(OrderDto::from);
         return ResponseEntity.ok(CommonResponse.createSuccess(result));
     }

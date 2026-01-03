@@ -51,15 +51,14 @@ public class OrderApiController {
     }
 
     @GetMapping("/api/page/orders")
-    public ResponseEntity<CommonResponse<List<OrderDto>>> findOrders_Page(
+    public ResponseEntity<CommonResponse<Page<OrderDto>>> findOrders_Page(
             @RequestParam(value = "offset", defaultValue = "0")int offset,
             @RequestParam(value = "limit", defaultValue = "100")int limit
     ) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
 
-        Page<Order> orders = orderRepository.findAllWithMemberDelivery(pageRequest);
-        List<OrderDto> result = orders.stream()
-                .map(OrderDto::from).toList();
+        Page<Order> orders = orderRepository.findJpqlWithMemberDelivery(pageRequest);
+        Page<OrderDto> result = orders.map(OrderDto::from);
         return ResponseEntity.ok(CommonResponse.createSuccess(result));
     }
 }

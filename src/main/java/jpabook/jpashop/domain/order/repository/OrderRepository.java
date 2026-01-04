@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, CustomOrderRepository {
 
     //@Query("select o from Order o join fetch o.member m join fetch o.delivery d")
     @EntityGraph(attributePaths = {"member", "delivery"})
